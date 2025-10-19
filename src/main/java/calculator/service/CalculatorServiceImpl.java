@@ -23,4 +23,31 @@ public class CalculatorServiceImpl implements CalculatorService {
 
         return replacedString;
     }
+
+    private String deleteCustomDefine(String userInput, List<Character> allDelimiters) {
+        StringBuilder sb = new StringBuilder(userInput);
+        int searchIndex = 0;
+
+        while (sb.indexOf(START_CUSTOM_DELIMITER) != -1) {
+            int startIndex = sb.indexOf(START_CUSTOM_DELIMITER, searchIndex);
+            int endIndex = sb.indexOf(END_CUSTOM_DELIMITER, startIndex);
+
+            if (endIndex - startIndex != 3) {
+                System.out.println(endIndex - startIndex);
+                throw new IllegalArgumentException("구분자는 단일문자만 가능합니다.");
+            }
+
+            int customDelimiterIndex = sb.indexOf(START_CUSTOM_DELIMITER) + 2;
+            char customDelimiter = sb.charAt(customDelimiterIndex);
+
+            if(Character.getNumericValue(customDelimiter) != -1){
+                throw new IllegalArgumentException("숫자는 커스텀 구분자가 될 수 없습니다.");
+            }
+
+            allDelimiters.add(customDelimiter);
+            sb.delete(startIndex, endIndex + 2);
+            searchIndex = startIndex;
+        }
+        return sb.toString();
+    }
 }
