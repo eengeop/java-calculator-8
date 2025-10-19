@@ -50,4 +50,15 @@ public class CalculatorServiceImpl implements CalculatorService {
         }
         return sb.toString();
     }
+
+    private String replaceCustomToDefault(String trimedString, List<Character> allDelimiters) {
+        StringBuilder sb = new StringBuilder(trimedString);
+
+        for (int i = 0; i < trimedString.length(); i++) {
+            if (allDelimiters.contains(sb.charAt(i))) {
+                sb.replace(i, i + 1, ",");
+            }
+        }
+        return sb.toString();
+    }
 }
